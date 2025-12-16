@@ -1,0 +1,22 @@
+[gd_scene load_steps=5 format=3 uid="uid://b5euf3h358583"]
+
+[ext_resource type="Script" uid="uid://j42wfugyg3oi" path="res://ball.gd" id="1_41u45"]
+[ext_resource type="Script" uid="uid://ji1ei84g1hct" path="res://draw_circle.gd" id="2_ktgx5"]
+[ext_resource type="AudioStream" uid="uid://caixioj16rsdh" path="res://hit_sound.mp3" id="3_ktgx5"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_v53mg"]
+
+[node name="Ball" type="CharacterBody2D"]
+floor_stop_on_slope = false
+floor_constant_speed = true
+floor_block_on_wall = false
+script = ExtResource("1_41u45")
+
+[node name="DrawCircle" type="Node2D" parent="."]
+script = ExtResource("2_ktgx5")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_v53mg")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_ktgx5")

@@ -1,0 +1,111 @@
+[gd_scene load_steps=16 format=3 uid="uid://d34s2xnpt2d15"]
+
+[ext_resource type="Script" uid="uid://c5ndvi5i388ed" path="res://label.gd" id="1_f8qjv"]
+[ext_resource type="Script" uid="uid://bdwcs05kgdylr" path="res://breakout_scene.gd" id="1_q7ut5"]
+[ext_resource type="Script" uid="uid://csv0pxe8aghmh" path="res://paddle.gd" id="1_xxvka"]
+[ext_resource type="AudioStream" uid="uid://bejt3v7ylq2is" path="res://fahhh-pump-sound.mp3" id="3_a7g5a"]
+[ext_resource type="AudioStream" uid="uid://crrv5fj21n6a1" path="res://wow.mp3" id="3_dn8eq"]
+[ext_resource type="PackedScene" uid="uid://b5euf3h358583" path="res://ball.tscn" id="3_o7uod"]
+[ext_resource type="Script" uid="uid://bsyuas7skiccv" path="res://brick_grid.gd" id="4_o7uod"]
+[ext_resource type="AudioStream" uid="uid://f45xp3qflhdc" path="res://applause.mp3" id="5_ouvb8"]
+[ext_resource type="AudioStream" uid="uid://cvbyg6kchfukv" path="res://background-music-377647.mp3" id="6_q7ut5"]
+[ext_resource type="Script" uid="uid://dmiubpop5x5sc" path="res://audio_stream_player_2d.gd" id="7_gerig"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_co3qd"]
+size = Vector2(200, 20)
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_424cu"]
+normal = Vector2(1, 0)
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_v53mg"]
+normal = Vector2(-1, 0)
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_o7uod"]
+normal = Vector2(0, 1)
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_f8qjv"]
+
+[node name="BreakoutScene" type="Node2D"]
+script = ExtResource("1_q7ut5")
+
+[node name="Background" type="ColorRect" parent="."]
+offset_right = 1920.0
+offset_bottom = 1080.0
+color = Color(0, 0, 0, 1)
+
+[node name="Label" type="Label" parent="Background"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -47.5
+offset_right = 47.5
+offset_bottom = 49.0
+grow_horizontal = 2
+text = "Score: 0
+Highscore: 0"
+horizontal_alignment = 1
+script = ExtResource("1_f8qjv")
+
+[node name="Fahhh" type="AudioStreamPlayer2D" parent="Background/Label"]
+position = Vector2(47.5, 900)
+stream = ExtResource("3_a7g5a")
+
+[node name="Wow" type="AudioStreamPlayer2D" parent="Background/Label"]
+stream = ExtResource("3_dn8eq")
+
+[node name="Applause" type="AudioStreamPlayer2D" parent="Background/Label"]
+stream = ExtResource("5_ouvb8")
+
+[node name="Paddle" type="StaticBody2D" parent="."]
+position = Vector2(960, 972)
+script = ExtResource("1_xxvka")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Paddle"]
+shape = SubResource("RectangleShape2D_co3qd")
+debug_color = Color(1, 1, 1, 0.41960785)
+
+[node name="Polygon2D" type="Polygon2D" parent="Paddle"]
+polygon = PackedVector2Array(-100, -10, -100, 10, 100, 10, 100, -10)
+
+[node name="LeftWall" type="StaticBody2D" parent="."]
+position = Vector2(0, 540)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LeftWall"]
+shape = SubResource("WorldBoundaryShape2D_424cu")
+
+[node name="RightWall" type="StaticBody2D" parent="."]
+position = Vector2(1920, 540)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RightWall"]
+shape = SubResource("WorldBoundaryShape2D_v53mg")
+
+[node name="TopWall" type="StaticBody2D" parent="."]
+position = Vector2(960, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TopWall"]
+shape = SubResource("WorldBoundaryShape2D_o7uod")
+
+[node name="BottomWall" type="StaticBody2D" parent="."]
+position = Vector2(960, 1080)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BottomWall"]
+shape = SubResource("WorldBoundaryShape2D_f8qjv")
+
+[node name="Ball" parent="." instance=ExtResource("3_o7uod")]
+position = Vector2(960, 900)
+
+[node name="BrickGrid" type="Node2D" parent="."]
+position = Vector2(0, 120)
+script = ExtResource("4_o7uod")
+
+[node name="Music" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("6_q7ut5")
+autoplay = true
+script = ExtResource("7_gerig")
+
+[connection signal="brick_broken" from="Ball" to="Background/Label" method="_on_ball_brick_broken"]
+[connection signal="reset" from="Ball" to="Background/Label" method="_on_ball_reset"]
+[connection signal="reset" from="Ball" to="BrickGrid" method="_on_ball_reset"]
+[connection signal="update_life" from="Ball" to="Background/Label" method="_on_ball_update_life"]
+[connection signal="finished" from="Music" to="Music" method="_on_finished"]

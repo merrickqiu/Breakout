@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3 uid="uid://ckcmky3avg5r1"]
+
+[ext_resource type="Script" uid="uid://cn0ynw4won0ox" path="res://brick_scene.gd" id="1_47llo"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6jptf"]
+size = Vector2(120, 40)
+
+[node name="Node2D" type="Node2D"]
+script = ExtResource("1_47llo")
+
+[node name="Brick" type="StaticBody2D" parent="."]
+position = Vector2(60, 20)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Brick"]
+shape = SubResource("RectangleShape2D_6jptf")
+debug_color = Color(1, 1, 1, 0.41960785)
+
+[node name="Polygon2D" type="Polygon2D" parent="Brick"]
+polygon = PackedVector2Array(-60, -20, -60, 20, 60, 20, 60, -20)
+
+[connection signal="input_event" from="Brick" to="Brick" method="_on_input_event"]
